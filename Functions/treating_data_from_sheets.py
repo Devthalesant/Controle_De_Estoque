@@ -1,4 +1,4 @@
-from get_data_from_sheets import *
+from .get_data_from_sheets import *
 import pandas as pd
 
 
