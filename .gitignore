@@ -1,0 +1,6 @@
+venv/
+.streamlit/secrets.toml
+Ambiente de Impressão/
+Ambiente de Rede/
+Configurações Locais/
+
