@@ -5,3 +5,6 @@ datetime
 holidays
 streamlit
 st-gsheets-connection
+pymongo
+mongo
+openpyxl
