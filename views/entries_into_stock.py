@@ -27,11 +27,23 @@ if enterie_option:
         procedimentos = [p for p, f in procedimentos_fornecedores.items() if f == fornecedor_selecionado]
         produtos = st.multiselect("Escolha um produto 💊: ",options=procedimentos)
 
+        # Dicionário para armazenar as quantidades
+        quantidades = {}
+
+        for produto in produtos:
+            # Cria um campo de texto para cada produto selecionado #f"qtd_{produto}" cria uma chave única para cada produto
+            quantidade = st.text_input(f"Quantidade de {produto}", key=f"qtd_{produto}")
+            quantidades[produto] = quantidade
+
+        st.write(quantidades)
+
+
     else:
         branch_optin = st.selectbox("Selecione a Unidade que Emprestou 🌐",unidades_options,index= None)
         fornecedor_selecionado = st.selectbox("Escolha um Fornecedor 🤝: ",options=fornecedores_unicos,index= None)
         procedimentos = [p for p, f in procedimentos_fornecedores.items() if f == fornecedor_selecionado]
         produtos = st.multiselect("Escolha um produto 💊: ",options=procedimentos)
+
 else:
     st.warning("Selecione uma Opção")
     
