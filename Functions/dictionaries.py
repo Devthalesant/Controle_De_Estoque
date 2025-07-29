@@ -9,9 +9,9 @@ procedimentos_fornecedores = {
     "MILIMETRIC LEVE": "CIMED",
     "MILIMETRIC MODERADO": "CIMED",
     "PRÓ-BELLA": "VICTALAB",
-    "PRÓ-FIT": "VICTALAB",
     "PRÓ-LIPO": "VICTALAB",
-    "PRÓ-MESO": "VICTALAB",
+    "PRÓ-MESO (M)": "VICTALAB",
+    "PRÓ-MESO (F)": "VICTALAB",
     "RADIESSE": "MERZ",
     "RENNOVA SHAPE-LIDO": "RENNOVA",
     "RESTYLANE GEL": "GALDERMA",
@@ -20,3 +20,4 @@ procedimentos_fornecedores = {
     "RESTYLANE SKINBOOSTER VITAL LIGHT": "GALDERMA",
     "SCULPTRA": "GALDERMA"
 }
+

@@ -16,6 +16,13 @@ entradas_page = st.Page(
     icon=":material/thumb_up:",
 )
 
+contagem_page = st.Page(
+    "views/stock_counts_forms.py",
+    title="Contagem de estoque",
+    icon=":material/thumb_up:",
+)
+
+
 # --- NAVIGATION SETUP [WITHOUT SECTIONS] ---
 # pg = st.navigation(pages=[about_page, project_1_page, project_2_page])
 
@@ -23,7 +30,8 @@ entradas_page = st.Page(
 pg = st.navigation(
     {
         "Visualização - Estoque 💉": [visualizar_page],
-        "Entradas - Estoque 📦": [entradas_page]
+        "Entradas - Estoque 📦": [entradas_page],
+        "Contagem de Estoque 🔢" :[contagem_page]
     }
 )
 
