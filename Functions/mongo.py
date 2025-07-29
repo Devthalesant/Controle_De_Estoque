@@ -3,6 +3,8 @@ from pymongo.server_api import ServerApi
 import pandas as pd
 import streamlit as st
 
+
+
 #para funcionar: base = df.to_dict(orient='records')
 
 uri = st.secrets.mongo_credentials.uri
@@ -76,3 +78,53 @@ def atualizar_estoque(data, produtos_quantidades):
             {"$inc": {"estoque.$.quantidade": quantidade}},  # Incrementa a quantidade
             upsert=True  # Cria novo registro se não existir
         )
+
+def pegar_ultimas_duas_datas_mongodb(database_name, collection_name):
+    client = MongoClient(uri)
+    db = client[database_name]
+    collection = db[collection_name]
+
+    # Pega todos os documentos
+    documentos = list(collection.find({}))
+
+    # Extrai todas as datas de estoque
+    datas_estoque = list({
+        doc.get('metadata', {}).get('data_estoque')
+        for doc in documentos
+        if doc.get('metadata', {}).get('data_estoque') is not None
+    })
+
+    # Converte e ordena as datas (garante datetime)
+    datas_ordenadas = sorted(datas_estoque, reverse=True)
+
+    # Seleciona as duas mais recentes
+    ultimas_duas_datas = datas_ordenadas[:2]
+
+    # Agora filtra os documentos com essas datas
+    documentos_filtrados = [
+        doc for doc in documentos
+        if doc.get('metadata', {}).get('data_estoque') in ultimas_duas_datas
+    ]
+
+    # Expande estoque
+    registros_expandidos = []
+
+    for doc in documentos_filtrados:
+        data_estoque = doc.get('metadata', {}).get('data_estoque')
+        data_registro = doc.get('metadata', {}).get('data_registro')
+        estoque = doc.get('estoque', [])
+
+        for item in estoque:
+            registros_expandidos.append({
+                'data_estoque': data_estoque,
+                'data_registro': data_registro,
+                'procedimento': item.get('procedimento'),
+                'quantidade': item.get('quantidade')
+            })
+
+    df = pd.DataFrame(registros_expandidos)
+    
+    # Ordena por data_estoque e procedimento para visualização
+    df = df.sort_values(by=['data_estoque', 'procedimento'])
+
+    return df

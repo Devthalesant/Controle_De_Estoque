@@ -1,66 +1,6 @@
 from .get_data_from_sheets import *
 import pandas as pd
 
-
-######################################################################################### 
-#Treating the counts
-
-def treating_counts_date():
-    df_contagens = load_dataframe("Aux - Contagem - Respostas")
-
-    # Ordenar por data
-    df_contagens = df_contagens.sort_values('Timestamp', ascending=False)
-
-    # Pegar as 2 últimas datas em que tivemos contagem
-    ultimas_duas_datas = df_contagens['Timestamp'].head(2)
-
-    # Pega a data mais recente (a primeira após ordenar)
-    ultima_data = df_contagens['Timestamp'].iloc[0]
-    penultima_data = df_contagens['Timestamp'].iloc[1]
-
-    # Formatando as datas
-    ultima_data = pd.to_datetime(ultima_data).date()
-    penultima_data = pd.to_datetime(penultima_data).date()
-
-    # Gera todas as datas no intervalo (de penúltima até um dia antes da última)
-    datas_intervalo = pd.date_range(
-        start=penultima_data,
-        end=ultima_data - pd.Timedelta(days=1),  # Exclui a última data
-        freq='D'  # Frequência diária
-    ).date.tolist()  # Converte para lista de datas
-
-    # formatando as daras da lista  - List comprehension
-    datas_formatadas = [data.strftime('%d/%m/%Y') for data in datas_intervalo]
-
-    # Filtrando o DataFrame para apenas essas 2 linhas
-    df_contagens_filtrado = df_contagens[df_contagens['Timestamp'].isin(ultimas_duas_datas)]
-
-    # Agora fazemos a transformação (melt) para ter produtos como linhas
-    df_contagens_transformado = df_contagens_filtrado.melt(
-        id_vars=['Timestamp', 'Email Address'], 
-        var_name='Produto', 
-        value_name='Quantidade'
-    )
-
-    # Tranformando as datas
-    df_contagens_transformado['Timestamp'] = pd.to_datetime(df_contagens_transformado['Timestamp'])
-    df_contagens_transformado['Timestamp'] = df_contagens_transformado['Timestamp'].dt.strftime('%d/%m/%Y')
-
-    # Pivotamos para ter as datas como colunas
-    df_contagens_final = df_contagens_transformado.pivot(
-        index='Produto', 
-        columns='Timestamp', 
-        values='Quantidade'
-    ).reset_index()
-
-    # Remove o nome do eixo das colunas
-    df_contagens_final.columns.name = None  
-
-
-    # Resultado final
-    return df_contagens_final, datas_formatadas
-
-######################################################################################### 
 #handling stocks output
 
 def merging_stocks_outputs_and_counts(df_contagens_final,datas_formatadas):
