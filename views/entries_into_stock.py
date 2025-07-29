@@ -8,6 +8,11 @@ from Functions.dictionaries import *
 from Functions.mongo import atualizar_estoque
 from pymongo import MongoClient 
 
+# Adicione no início do script, após os imports
+if 'refresh' in st.session_state:
+    del st.session_state.refresh
+    st.rerun()
+
 st.title("Entradas no Estoque 🚚")
 
 # Seletor de data
@@ -100,7 +105,3 @@ if enterie_option and quantidades:
         except Exception as e:
             st.error(f"Erro: {e}")
 
-# Adicione no início do script, após os imports
-if 'refresh' in st.session_state:
-    del st.session_state.refresh
-    st.rerun()
